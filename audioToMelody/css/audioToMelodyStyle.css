@@ -39,6 +39,10 @@ a:visited {
 	color: #6633FF;
 }
 
+ul {
+	padding: 0px 0 10px 80px;
+}
+
 .LINE_BREAK_HOR_85 {
 	height: 1px;
 	width: 85%;
@@ -50,6 +54,28 @@ a:visited {
 p {
 	padding-left: 40px;
 	padding-right: 40px;		
+}
+
+
+
+/*Square-Corner Border */
+#SQUARE_BORDER, #ROUND_BORDER {
+	display:none;
+	/*Overlapping ROUND_BORDER on top of SQUARE_BORDER to hide the square border except four corners*/
+	width: 540px;
+	height: 680px;
+	
+	position:absolute;
+
+	border: 1px solid #A9A9A9;
+}
+
+#ROUND_BORDER {
+	/*z-index: 10;*/
+
+	background-color: white;
+	border-radius: 50px;
+	border-color: white;
 }
 
 /*Overall Container*/
