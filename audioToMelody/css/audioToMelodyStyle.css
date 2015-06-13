@@ -9,6 +9,7 @@
 body {
 	font-family: 'Roboto', sans-serif;
 	background-color: #E9EAED;
+	/*background-color: red;*/
 }
 
 h1, h2 {
@@ -56,39 +57,30 @@ p {
 	padding-right: 40px;		
 }
 
-
-
-/*Square-Corner Border */
+/*Image container and image figure caption */
 .imageContainer {
+	/*display:inline-block;*/
 	width: 480px;
-	height: 320px;
-	/*float: left;*/
-}
-
-.SQUARE_BORDER, .ROUND_BORDER {
-	/*display:none;*/
-	/*Overlapping ROUND_BORDER on top of SQUARE_BORDER to hide the square border except four corners*/
-	width: 480px;
-	height: 320px;
-	position:absolute;
-
 	border: 1px solid #A9A9A9;
 }
 
-.ROUND_BORDER {
-	/*z-index: 10;*/
-
-	background-color: white;
-	border-radius: 50px;
-	border-color: white;
-}
-
-/*Margin settings for the images to fit in the round corner borders */
 .image_margin {
 	padding: 15px;
-	/*width: 100px;*/
-	max-width:100%;
-	max-height:100%;
+	width: 480px;
+	height: 320px;
+}
+
+p.figureText {
+	width: 480px;
+	word-wrap: break-word;
+	margin: 10px 0 10px 10px;
+}
+
+.LINE_BREAK_IMAGE_85 {
+	height: 1px;
+	width: 85%;
+	background-color: #A9A9A9;
+	margin: 0 auto;
 }
 
 /*Overall Container*/
