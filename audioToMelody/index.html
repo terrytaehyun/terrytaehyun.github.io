@@ -13,6 +13,7 @@
 
 		<body class="no_select">
 			<div id="container">
+				
 				<h2>Introduction</h2>
 				<p>
 					On mid-August of 2014, Shazam, one of the main service provider of music identification tool, has announced that <a href="http://news.shazam.com/pressreleases/shazam-	surpasses-100-million-mobile-monthly-active-users-1042187" target="_blank">its monthly active user count of their service has surpassed over 100 million</a>. This project 	is proposed to learn and implement the note identification technique that can be used later for a music identification tool, which already has been proven to be convenient 	and have high demands from many users.
@@ -20,6 +21,7 @@
 
 				<div class="LINE_BREAK_HOR_85"></div>
 
+				
 				<h2>Background</h2>
 				<p>
 					In the time domain, sound can be represented as a composition of sinusoid waves. As the pitch of the sound increases (by playing higher notes), the frequency of the 	composited sinusoid wave will decrease and each note of an instrument will have a unique frequency signature.
@@ -31,6 +33,7 @@
 
 				<div class="LINE_BREAK_HOR_85"></div>
 
+				
 				<h2>Objectives</h2>
 				<p>
 					To analyze a sound signal from a song in the frequency domain and be able to recover the sequence of notes. Once a sequence is determined, be able to identify the song by comparing the sequence to a database of note sequences.
@@ -41,7 +44,169 @@
 					</ul>
 				</p>
 
-			</div>
+				<h2>Pictures-Testing</h2>
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/1_A4WavFilePlot.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/2_0Magnitude_A4WavFilePlot.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/2_1Magnitude_A4WavFilePlotStartIndicated.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/3_Magnitude_A4WavFilePlot_zoombox.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/4_zoomed.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/5_fewPeaksCircled.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/6_1_smoothItOut.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/6_2_smoothItOut.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/7_0Original.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/7_1smoothItOutEntire.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/7_2DetectedPeak.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/8_HandlingMulti_WavFile.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/9_HandlingMulti_magOfwav.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/10_HandlingMulti_magOfwavANDGaussian.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/11_HandlingMulti_magOfwavANDGaussian_ZoomWindow.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/12_HandlingMulti_zoomed.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/13_HandlingMulti_zoomed_StartOfNote_Marked_FirstNote.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/14_HandlingMulti_zoomed_StartOfNote_Marked_SecondNote.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/15_HandlingMulti_zoomed_StartOfNote_FirstNoteEnding.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/16_DurationOfFirstNote.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/17_HandlingMulti_magOfwavANDGaussiancopy.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/7_2DetectedPeak.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+				<div class="imageContainer">
+					<div class="SQUARE_BORDER"></div>
+					<div class="ROUND_BORDER">
+						<img class="image_margin" src="./img/18_SeparatedSegment.png" alt="Matlab graph of A4 note">
+					</div>
+				</div>
+
+			</div><!-- END OF container -->
 		</body>
 
 	</html>
