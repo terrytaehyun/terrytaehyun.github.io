@@ -16,7 +16,16 @@
 				
 				<h2>Introduction</h2>
 				<p>
-					On mid-August of 2014, Shazam, one of the main service provider of music identification tool, has announced that <a href="http://news.shazam.com/pressreleases/shazam-	surpasses-100-million-mobile-monthly-active-users-1042187" target="_blank">its monthly active user count of their service has surpassed over 100 million</a>. This project 	is proposed to learn and implement the note identification technique that can be used later for a music identification tool, which already has been proven to be convenient 	and have high demands from many users.
+					Sound, along with the other four senses of human, plays important role of transferring data from one to another. As a person, and as a musician who enjoys music, I consider the field of audio attractive.
+				</p>
+				<p>
+					Sound in engineering has many applications. By transcribing an audio recording to a computer-recognizable data, one can further process the data with various computer aided tools. 
+				</p>
+				<p>
+					For example, Shazam, one of the main service provider of music identification tool, has announced that <a href="http://news.shazam.com/pressreleases/shazam-	surpasses-100-million-mobile-monthly-active-users-1042187" target="_blank">its monthly active user count of their service has surpassed over 100 million</a>. Shazam also recently formed a partnership with Apple, and now offers their service through Siri. (Try asking Siri: “What song is this?”)
+				</p>
+				<p>
+					In this posting, I will be presenting the project I did in ECE462 – Sensory Communications course at University of Toronto. You can expect to learn the note separation technique (extracting individual instance of notes in the input recording) I used in the project, and how my team analyzed the extracted notes in frequency domain to determine their note names.
 				</p>
 
 				<div class="LINE_BREAK_HOR_85"></div>
@@ -46,7 +55,7 @@
 
 				<h2>Definition - Decaying Instruments vs. Non-decaying Instruments</h2>
 				<p>
-					This project’s methodologies assume that the sound inputs are recordings of the decaying instruments. Decaying instruments include families of chordophones (i.e. Guitar, harps, piano, etc.) and percussion (i.e. xylophone) instruments. These instruments have highest sound intensity at the time of flicking strings/striking keys of the instrument, and the sound intensity exponentially decays over time. 
+					This project’s methodologies assume that the sound inputs are recordings of the decaying instruments. Decaying instruments include families of chordophones (i.e. Guitar, harps, piano, etc.) and percussion (i.e. xylophone) instruments. These instruments have highest sound intensity at the time of flicking strings/striking keys of the instrument, which decays exponentially over time. 
 				</p>
 				<p>
 					On the other hand, the common non-decaying instruments include woodwind instruments (i.e. Saxophone, flute, clarinet, etc.). When played with constant breath, these instruments’ sound intensities are somewhat equal over time.
