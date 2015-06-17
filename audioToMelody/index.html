@@ -156,7 +156,7 @@
 				Can we use the same approach in the algorithm? 
 			</p>
 
-			<h3>Detecting Stikes</h3>
+			<h3 class="subHeading">Detecting Stikes</h3>
 			<p>
 				We can detect the sudden amplitude jumps by finding local maximums in the plot. However, even though the plot in the Figure 2 might look like a bar graph, sound has a wave-like property and its amplitude oscillates very quickly over time. One can see this more clearly by zooming into the plot.
 			</p>
@@ -193,7 +193,7 @@
 			</div>
 			
 
-			<h3>Detecting Starting Point of Strikes - Locating Local Maximums</h3>
+			<h3 class="subHeading">Detecting Starting Point of Strikes - Locating Local Maximums</h3>
 			<p>
 				We can use a Gaussian Filter to find the envelope. By convolving a Gaussian Curve to our plot, we can filter out the high frequency component of the plot. Although details of convolution operation will not be covered in this post, following points should be enough to understand this operation:
 				<ul>
@@ -266,7 +266,7 @@
 			</p>
 
 
-			<h3>Finding Ending Point of the Strikes</h3>
+			<h3 class="subHeading">Finding Ending Point of the Strikes</h3>
 			<p>
 				For ending points, we can simply take the midpoint of consecutive starting points. For the last strike in the recording, we will set its ending point to end of the recording.
 			</p>
@@ -282,7 +282,7 @@
 				Figure 11 shows the overall process of finding duration of the first note.
 			</p>
 
-			<h3>Segments from the Note Separation Algorithm</h3>
+			<h3 class="subHeading">Segments from the Note Separation Algorithm</h3>
 			<p>
 				Figure 12 below shows the extracted segments from the input recording. Each of these segments will be presented to the Frequency Detection algorithm.
 			</p>
