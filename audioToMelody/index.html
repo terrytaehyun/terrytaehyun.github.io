@@ -44,12 +44,7 @@
 				
 			<h2>Objectives</h2>
 			<p>
-				To analyze a sound signal from a song in the frequency domain and be able to recover the sequence of notes. Once a sequence is determined, be able to identify the song by comparing the sequence to a database of note sequences.
-				<ul>
-					<li>The input sound signal must have only one note played at a given time.</li>
-					<li>The input sound signal must be produced from a piano (decaying instrument).</li>
-					<li>The input sound signal must not contain any noise.</li>
-				</ul>
+				The objective of the project was to transcribe the input audio recordings of a digital piano to their relative note sequences. Although it won’t be covered in this post, the transcribed note sequence was compared against a database to return the name of the melody from the input recording, if the melody existed within the database.
 			</p>
 
 			<div class="LINE_BREAK_HOR_85"></div>
@@ -84,7 +79,7 @@
 					The input recording must be within range of C4 to B5. Since we allow multiple notes to be played at single strike, we need this restriction for the Frequency Detection algorithm to work. Without this restriction, overlap of partials will disallow us to use threshold method to retrieve the fundamental frequencies present in the input.
 				</li>
 				<li>
-					The input recording must be noise-free, sudden peak will be falsely detected as starting point of a strike.
+					The input recording must be noise-free, as sudden peak of amplitude will be falsely detected as starting point of a strike.
 				</li>
 			</ul>
 
@@ -118,74 +113,87 @@
 			<div class="LINE_BREAK_HOR_85"></div>
 
 
-			<h2>Definition - Decaying Instruments vs. Non-decaying Instruments</h2>
+			<h2>Methodologies</h2>
+			<h3 class="subHeading">Characterics of Decaying Instruments</h3>
 			<p>
-				This project’s methodologies assume that the sound inputs are recordings of the decaying instruments. Decaying instruments include families of chordophones (i.e. Guitar, harps, piano, etc.) and percussion (i.e. xylophone) instruments. These instruments have highest sound intensity at the time of flicking strings/striking keys of the instrument, which decays exponentially over time. 
-			</p>
-			<p>
-				On the other hand, the common non-decaying instruments include woodwind instruments (i.e. Saxophone, flute, clarinet, etc.). When played with constant breath, these instruments’ sound intensities are somewhat equal over time.
+				As it was mentioned above, the sound signal from the decaying instruments has exponentially decaying shape over time.
 			</p>
 				
 			<div class="imageContainer">
 					<img class="image_margin" src="./img/1_A4WavFilePlot.png" alt="Matlab graph of A4 note">
 					<div class="LINE_BREAK_IMAGE_85"></div>
 					<p class="figureText">
-						Figure 1: Plot of sound signal (A4 note played in a digital keyboard)
+						Figure 1: Plot of sound signal. (A4 note played in a digital keyboard)
 					</p>
 			</div>
 				
 			<p>
-				The Figure 1 shows a Matlab plot of the note A4 from a digital piano (Decaying instrument). As one can observe, it has the highest peaks at the beginning of the note and the peaks decrease exponentially over time.
+				The Figure 1 shows a Matlab plot of the note A4 from a digital piano (decaying instrument). As one can observe, it has the highest peaks at the beginning of the note and the peaks decrease exponentially over time. 
+			</p>
+			<p>
+				The y-axis of the plot refers to the sound intensity of the signal at time t. This indicates that sound from the instrument is loudest at the time of the strike. This behavior is expected, as we hear the sound being faded out over time when we press a key from the piano.
 			</p>
 
 			<p>
-				Now that we agree on the expected behavior of the input, let’s remind ourselves of the objective of the project: we are to detect note signatures of the sound recording of a decaying instrument. This means we expect the recording inputs to have more than one instance of note. To be able to detect individual notes, we must first separate each note from one another.
+				As we did not set the maximum length of the input recording, we expect it to have multiple instances of strikes. To be able to detect individual notes, we must first separate each strike from one another.
 			</p>
 			<p>
-				Let’s start from the base case: recording with single note. 
+				Let’s start from the base case: recording with single strike. 
 			</p>
 				
 			<div class="imageContainer">
 				<img class="image_margin" src="./img/2_1Magnitude_A4WavFilePlotStartIndicated.png" alt="Matlab graph of A4 note">
 				<div class="LINE_BREAK_IMAGE_85"></div>
 				<p class="figureText">
-					Figure 2: Magnitude plot of A4 sound signal
+					Figure 2: Magnitude plot of A4 sound signal.
 				</p>
 			</div>
 
 			<p>
-				Consider Figure 2, which shows magnitude plot of the sound sample shown before in Figure 1. As humans, we can easily detect the starting point of the note – Our eyes can easily detect the sudden amplitude jump at the marked location.
+				Consider Figure 2, which shows magnitude plot of the sound sample shown before in Figure 1. As humans, we can easily detect the starting point of the strike – Our eyes can easily detect the sudden amplitude jump at the marked location.
 			</p>
 			<p>
 				Can we use the same approach in the algorithm? 
 			</p>
 
-			<h2>Detecting Starting Point of Notes - Locating Local Maximums</h2>
+			<h3>Detecting Stikes</h3>
 			<p>
-				We can detect sudden amplitude jumps by finding local maximums in the plot. However, even though the plot in the Figure 2 might look like a bar graph, sound has a wave-like property and the amplitude oscillates very quickly over time. One can see this more clearly by zooming into the plot.
+				We can detect the sudden amplitude jumps by finding local maximums in the plot. However, even though the plot in the Figure 2 might look like a bar graph, sound has a wave-like property and its amplitude oscillates very quickly over time. One can see this more clearly by zooming into the plot.
 			</p>
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/3_Magnitude_A4WavFilePlot_zoombox.png" alt="Matlab graph of A4 note">.
+				<img class="image_margin" src="./img/3_Magnitude_A4WavFilePlot_zoombox.png" alt="Zoom-box indicating where the plot in Figure 2 will be zoomed into">.
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 3: Zoom Box - Area where the plot will zoom into.
+				</p>
 			</div>
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/5_fewPeaksCircled.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/5_fewPeaksCircled.png" alt="Matlab graph of A4 note zoomed in to the Zoombox mentioned in Figure 3">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 4: Zoomed-in plot of the magnitude plot of note A4. 6 of the peaks have been marked.
+				</p>
 			</div>
 			<p>
 				 Figure 3 shows the area where I have zoomed in, and Figure 4 shows the zoomed-in plot.
 			</p>
 			<p>
-				As it is shown, the plot is a high frequency sinusoid. If we were to find local maximums, we would be ending up with many false data points. In the Figure 4, I have labelled few of the peaks that would falsely detected as starting point of the note.
+				As it is shown, the plot is a high frequency sinusoid. If we were to find local maximums, we would be ending up with many false data points. In the Figure 4, I have labelled few of the peaks that would falsely detected as starting point of the strike.
 			</p>
 
 			<p>
 				It is apparent that we need to simplify the data we are given with. If we can somehow average the peaks of the sinusoid and find a smooth curve that ‘envelopes’ the original plot, it can be used to detect overall behavior of the original plot. You can see an example of such envelope in Figure 5 below.
 			</p>
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/6_1_smoothItOut.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/6_1_smoothItOut.png" alt="Example of Envelope for the original signal">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 5: Envelope of the sound signal. The envelope is shown in red line, and is located above the original signal.
+				</p>
 			</div>
 			
 
-			<h2>Detecting Starting Point of Notes - Locating Local Maximums</h2>
+			<h3>Detecting Starting Point of Strikes - Locating Local Maximums</h3>
 			<p>
 				We can use a Gaussian Filter to find the envelope. By convolving a Gaussian Curve to our plot, we can filter out the high frequency component of the plot. Although details of convolution operation will not be covered in this post, following points should be enough to understand this operation:
 				<ul>
@@ -197,61 +205,97 @@
 				This means that if we want the envelope to keep overall shape of the plot, we must keep the low frequency components of the plot. And we can do so by convolving a Gaussian Curve with large standard deviation to the plot.
 			</p>
 
-			<p>
+			<!-- <p>
 				**Click to expand if you’re confused about why we must convolve a Gaussian curve with large standard deviation to the original plot**
 			</p>
+ 			-->
+
+ 			<div class="imageContainer">
+				<img class="image_margin" src="./img/gaussian.png" alt="8000-point Gaussian window">
+				<img class="image_margin_original" src="./img/gaussian_matlabFunc.png" alt="Matlab code for convolution">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 6: 8000-point Gaussian window and convolution operation code done in Matlab.
+				</p>
+			</div>
 
 			<p>
 				Gaussian curve I used is shown in Figure 6. The size of the curve was determined from trial and error that forms the best envelope. 
 			</p>
 
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/7_2DetectedPeak.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/7_2DetectedPeak.png" alt="Computed envelope shown in red">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 7: Result of the convolution of the Gaussian window and the original siganl.
+				</p>
 			</div>
 			<p>
-				Red curve in Figure 7 shows the computed envelope when the Gaussian curve is convoluted to the signal. After down sampling process, we can now find the starting point of the note by locating local maximums.
+				Red curve in Figure 7 shows the computed envelope when the Gaussian curve is convoluted to the signal. After down sampling process, we can now find the starting point of the strike by locating local maximums.
 			</p>
 
 			<p>
-				The same procedure can be applied to recording input with multiple instances of note. Figure 8 to 10 below shows the algorithm being applied to multiple instances of note.
+				The same procedure can be applied to recording input with multiple instances of stikes. Figure 8 to 10 below shows the algorithm being applied to multiple instances of strikes.
 			</p>
 
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/8_HandlingMulti_WavFile.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/8_HandlingMulti_WavFile.png" alt="Matlab graph of multiple instances of strikes">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 8: Matlab plot of input signal with 11 strikes.
+				</p>
 			</div>
 
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/9_HandlingMulti_magOfwav.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/9_HandlingMulti_magOfwav.png" alt="Magnitude plot of the signal from Figure 8">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 9: Input signal in its magnitude form.
+				</p>
 			</div>
 
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/10_HandlingMulti_magOfwavANDGaussian.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/10_HandlingMulti_magOfwavANDGaussian.png" alt="Computed Envelope for the signal with multiple strikes">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 10: Computed envelope using the 8000-point Gaussian window from Figure 6.
+				</p>
 			</div>
 			<p>
-				Now that we’re able to find out the starting points of each notes, we will now find the ending points, in order to extract individual instance of notes from the recording.
+				Now that we’re able to find out the starting points of each strikes, we will now find the ending points, in order to extract individual instance of strikes from the recording.
 			</p>
 
 
-			<h2>Finding Ending Point of the Note</h2>
+			<h3>Finding Ending Point of the Strikes</h3>
 			<p>
-				For ending points, we can simply take the midpoint of consecutive starting points. For the last note, we will extract the note until the recording ends.
+				For ending points, we can simply take the midpoint of consecutive starting points. For the last strike in the recording, we will set its ending point to end of the recording.
 			</p>
 
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/16_DurationOfFirstNote.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/16_DurationOfFirstNote.png" alt="Diagram that summerizes the process of extracting each strike from the input recording">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 11: The input recording will be extracted to several segments. The duration of the segment will be the starting point and the ending point of each strike. At the end, number of segments that the algorithm return should be same as the number of strikes present in the input recording. 
+				</p>
 			</div>
 			<p>
 				Figure 11 shows the overall process of finding duration of the first note.
 			</p>
 
-			<h2>Summary of Note Separation Algorithm</h2>
+			<h3>Segments from the Note Separation Algorithm</h3>
+			<p>
+				Figure 12 below shows the extracted segments from the input recording. Each of these segments will be presented to the Frequency Detection algorithm.
+			</p>
 			<div class="imageContainer">
-				<img class="image_margin" src="./img/18_SeparatedSegment.png" alt="Matlab graph of A4 note">
+				<img class="image_margin" src="./img/18_SeparatedSegment.png" alt="Matlab plot that shows the extracted segments from the input recording">
 				<div class="LINE_BREAK_IMAGE_85"></div>
 				<p class="figureText">
-					figure: hello world!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+					Figure 12: The extracted segments from the input recording. The segments are shown in green.
 				</p>
 			</div>
+
+			<p>
+			</p>
 
 		</div><!-- END OF container -->
 	</body>

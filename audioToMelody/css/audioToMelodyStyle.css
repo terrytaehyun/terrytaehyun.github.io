@@ -86,6 +86,10 @@ ul {
 	height: 320px;
 }
 
+.image_margin_original {
+	padding: 30px;
+}
+
 p.figureText {
 	/*width: 480px;*/
 	word-wrap: break-word;
