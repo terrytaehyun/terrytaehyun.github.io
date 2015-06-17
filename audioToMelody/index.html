@@ -1,207 +1,260 @@
 <!DOCTYPE html>
-	<html>
-		<head>
-			<meta charset="UTF-8">
+<html>
+	<head>
+		<meta charset="UTF-8">
 
-			<title>Spearbird::Audio to Melody</title>
+		<title>Spearbird::Audio to Melody</title>
 
-			<link href='http://fonts.googleapis.com/css?family=Roboto:500,100,300,400' rel='stylesheet' type='text/css' />
-			<link href="css/audioToMelodyStyle.css" rel="stylesheet" type="text/css" />
+		<link href='http://fonts.googleapis.com/css?family=Roboto:500,100,300,400' rel='stylesheet' type='text/css' />
+		<link href="css/audioToMelodyStyle.css" rel="stylesheet" type="text/css" />
 
-			<script type="text/javascript" src="js/" async></script>
+		<!-- Google Tag Manager -->
+		<script>
+  			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-			<!-- Google Tag Manager -->
-			<script>
-  				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  			ga('create', 'UA-64158825-1', 'auto');
+  			ga('send', 'pageview');
 
-  				ga('create', 'UA-64158825-1', 'auto');
-  				ga('send', 'pageview');
+		</script>
+	<!-- End Google Tag Manager -->
+	</head>
 
-			</script>
-		<!-- End Google Tag Manager -->
-		</head>
-
-		<body class="no_select">
-			<div id="container">
+	<body class="no_select">
+		<div id="container">
 				
-				<h2>Introduction</h2>
-				<p>
-					Sound, along with the other four senses of human, plays important role of transferring data from one to another. As a person, and as a musician who enjoys music, I consider the field of audio attractive.
-				</p>
-				<p>
-					Sound in engineering has many applications. By transcribing an audio recording to a computer-recognizable data, one can further process the data with various computer aided tools. 
-				</p>
-				<p>
-					For example, Shazam, one of the main service provider of music identification tool, has announced that <a href="http://news.shazam.com/pressreleases/shazam-	surpasses-100-million-mobile-monthly-active-users-1042187" target="_blank">its monthly active user count of their service has surpassed over 100 million</a>. Shazam also recently formed a partnership with Apple, and now offers their service through Siri. (Try asking Siri: “What song is this?”)
-				</p>
-				<p>
-					In this posting, I will be presenting the project I did in ECE462 – Sensory Communications course at University of Toronto. You can expect to learn the note separation technique (extracting individual instance of notes in the input recording) I used in the project, and how my team analyzed the extracted notes in frequency domain to determine their note names.
+			<h2>Introduction</h2>
+			<p>
+				Sound, along with the other four senses of human, plays important role of transferring data from one to another. 
+			</p>
+			<p>
+				Sound in engineering has many applications. By transcribing an audio recording to a computer-recognizable data, one can further process the data with various computer aided tools. 
+			</p>
+			<p>
+				For example, Shazam, one of the main service provider of music identification tool, has announced that <a href="http://news.shazam.com/pressreleases/shazam-	surpasses-100-million-mobile-monthly-active-users-1042187" target="_blank">its monthly active user count of their service has surpassed over 100 million</a>. Shazam also recently formed a partnership with Apple, and now offers their service through Siri. (Try asking Siri: “What song is this?”)
+			</p>
+			<p>
+				In this posting, I will be presenting the project I did in ECE462 – Sensory Communications course at University of Toronto. You can expect to learn the note separation technique (extracting individual instance of notes in the input recording) I used in the project, and how my team analyzed the extracted notes in frequency domain to determine their note names.
 				</p>
 
-				<div class="LINE_BREAK_HOR_85"></div>
+			<div class="LINE_BREAK_HOR_85"></div>
 
 				
-				<h2>Background</h2>
-				<p>
-					In the time domain, sound can be represented as a composition of sinusoid waves. As the pitch of the sound increases (by playing higher notes), the frequency of the 	composited sinusoid wave will decrease and each note of an instrument will have a unique frequency signature.
-				</p>
-	
-				<p>
-					By translating the composited sinusoid wave from the time domain to the frequency domain, one can identify frequencies of base sinusoids of the composited wave and be able to differentiate between notes and their frequency representation.
-				</p>
+			<h2>Objectives</h2>
+			<p>
+				To analyze a sound signal from a song in the frequency domain and be able to recover the sequence of notes. Once a sequence is determined, be able to identify the song by comparing the sequence to a database of note sequences.
+				<ul>
+					<li>The input sound signal must have only one note played at a given time.</li>
+					<li>The input sound signal must be produced from a piano (decaying instrument).</li>
+					<li>The input sound signal must not contain any noise.</li>
+				</ul>
+			</p>
 
-				<div class="LINE_BREAK_HOR_85"></div>
+			<div class="LINE_BREAK_HOR_85"></div>
 
-				
-				<h2>Objectives</h2>
-				<p>
-					To analyze a sound signal from a song in the frequency domain and be able to recover the sequence of notes. Once a sequence is determined, be able to identify the song by comparing the sequence to a database of note sequences.
-					<ul>
-						<li>The input sound signal must have only one note played at a given time.</li>
-						<li>The input sound signal must be produced from a piano (decaying instrument).</li>
-						<li>The input sound signal must not contain any noise.</li>
-					</ul>
-				</p>
 
-				<h2>Definition - Decaying Instruments vs. Non-decaying Instruments</h2>
-				<p>
-					This project’s methodologies assume that the sound inputs are recordings of the decaying instruments. Decaying instruments include families of chordophones (i.e. Guitar, harps, piano, etc.) and percussion (i.e. xylophone) instruments. These instruments have highest sound intensity at the time of flicking strings/striking keys of the instrument, which decays exponentially over time. 
-				</p>
-				<p>
-					On the other hand, the common non-decaying instruments include woodwind instruments (i.e. Saxophone, flute, clarinet, etc.). When played with constant breath, these instruments’ sound intensities are somewhat equal over time.
-				</p>
-				
-				<div class="imageContainer">
-						<img class="image_margin" src="./img/1_A4WavFilePlot.png" alt="Matlab graph of A4 note">
-						<div class="LINE_BREAK_IMAGE_85"></div>
-						<p class="figureText">
-							Figure 1: Plot of sound signal (A4 note played in a digital keyboard)
-						</p>
-				</div>
-				
-				<p>
-					The Figure 1 shows a Matlab plot of the note A4 from a digital piano (Decaying instrument). As one can observe, it has the highest peaks at the beginning of the note and the peaks decrease exponentially over time.
-				</p>
+			<h2>Terminologies</h2>
+			<h3 class="subHeading">Decaying Instruments</h3>
+			<p>
+				Decaying instruments include families of chordophones (i.e. Guitar, harps, piano, etc.) and percussion (i.e. xylophone) instruments. These instruments have highest sound intensity at the time of flicking strings/striking keys of the instrument, which decays exponentially over time.
+			</p>
+			<h3 class="subHeading">Non-decaying Instruments</h3>
+			<p>
+				Common non-decaying instruments include woodwind instruments (i.e. Saxophone, flute, clarinet, etc.). When played with constant breath, these instruments’ sound intensities are somewhat equal over time.
+			</p>
+			<h3 class="subHeading">Strike</h3>
+			<p>
+				Decaying instruments depend on the player of the instrument to flick strings (for chordophones) or strike keys (for percussions) for producing sound. In this posting, strike will refer to the moment when the player begins to make a new sound. It is important to note that the player is free to press more than one keys in a single strike.
+			</p>
 
-				<p>
-					Now that we agree on the expected behavior of the input, let’s remind ourselves of the objective of the project: we are to detect note signatures of the sound recording of a decaying instrument. This means we expect the recording inputs to have more than one instance of note. To be able to detect individual notes, we must first separate each note from one another.
-				</p>
-				<p>
-					Let’s start from the base case: recording with single note. 
-				</p>
+			<div class="LINE_BREAK_HOR_85"></div>
+
+
+			<h2>Constraints</h2>
+			<p>
+				For simplicity, we will be working with few constraints below:
+			</p>
+			<ul>
+				<li>
+					The input recording must be made from a digital piano. We require the input signal to have the exponential-decay shape in order for the Note Separation algorithm to work. Also, sound signals from piano does not have any Inharmonicity (meaning its harmonics are integer multiples of the fundamental frequency), and have the fundamental frequencies as the dominant frequencies (fundamental frequency will have highest energy)
+				</li>
+				<li>
+					The input recording must be within range of C4 to B5. Since we allow multiple notes to be played at single strike, we need this restriction for the Frequency Detection algorithm to work. Without this restriction, overlap of partials will disallow us to use threshold method to retrieve the fundamental frequencies present in the input.
+				</li>
+				<li>
+					The input recording must be noise-free, sudden peak will be falsely detected as starting point of a strike.
+				</li>
+			</ul>
+
+			<div class="LINE_BREAK_HOR_85"></div>			
+
+
+			<h2>Background</h2>
+			<p>
+				Two techniques will be introduced in this posting: <b>Note separation</b> and <b>Frequency detection</b>.
+			</p>
+
+			<h3 class="subHeading">Note Separation</h3>
+			<p>
+				Since a recording may contain multiple instances of sound from numerous strikes, we rely on this algorithm to extract individual instance of the strikes.
+			</p>
+			<p>
+				The note separation will be done in time domain to utilize the exponentially decaying shape of the decaying instrument’s signal. We will be creating an envelope that represents the original signal, and locate starting points of the strikes by finding local maximums of the envelope.
+			</p>
+
+			<h3 class="subHeading">Frequency Detection</h3>
+			<p>
+				By transforming the recording input to the frequency domain using Fast Fourier Transform, we can analyze the frequencies present in the recording. 
+			</p>
+			<p>
+				Since the name of each notes has unique fundamental frequency, we can look for a frequency bin (range of frequencies) with highest energy to find the name of the notes.
+			</p>
+			<p>
+				You may find <a href="https://en.wikipedia.org/wiki/Piano_key_frequencies#List" target="_blank">this table</a> from Wikipedia useful for matching the frequencies to their relative names.
+			</p>
+
+			<div class="LINE_BREAK_HOR_85"></div>
+
+
+			<h2>Definition - Decaying Instruments vs. Non-decaying Instruments</h2>
+			<p>
+				This project’s methodologies assume that the sound inputs are recordings of the decaying instruments. Decaying instruments include families of chordophones (i.e. Guitar, harps, piano, etc.) and percussion (i.e. xylophone) instruments. These instruments have highest sound intensity at the time of flicking strings/striking keys of the instrument, which decays exponentially over time. 
+			</p>
+			<p>
+				On the other hand, the common non-decaying instruments include woodwind instruments (i.e. Saxophone, flute, clarinet, etc.). When played with constant breath, these instruments’ sound intensities are somewhat equal over time.
+			</p>
 				
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/2_1Magnitude_A4WavFilePlotStartIndicated.png" alt="Matlab graph of A4 note">
+			<div class="imageContainer">
+					<img class="image_margin" src="./img/1_A4WavFilePlot.png" alt="Matlab graph of A4 note">
 					<div class="LINE_BREAK_IMAGE_85"></div>
 					<p class="figureText">
-						Figure 2: Magnitude plot of A4 sound signal
+						Figure 1: Plot of sound signal (A4 note played in a digital keyboard)
 					</p>
-				</div>
+			</div>
+				
+			<p>
+				The Figure 1 shows a Matlab plot of the note A4 from a digital piano (Decaying instrument). As one can observe, it has the highest peaks at the beginning of the note and the peaks decrease exponentially over time.
+			</p>
 
-				<p>
-					Consider Figure 2, which shows magnitude plot of the sound sample shown before in Figure 1. As humans, we can easily detect the starting point of the note – Our eyes can easily detect the sudden amplitude jump at the marked location.
+			<p>
+				Now that we agree on the expected behavior of the input, let’s remind ourselves of the objective of the project: we are to detect note signatures of the sound recording of a decaying instrument. This means we expect the recording inputs to have more than one instance of note. To be able to detect individual notes, we must first separate each note from one another.
+			</p>
+			<p>
+				Let’s start from the base case: recording with single note. 
+			</p>
+				
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/2_1Magnitude_A4WavFilePlotStartIndicated.png" alt="Matlab graph of A4 note">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 2: Magnitude plot of A4 sound signal
 				</p>
-				<p>
-					Can we use the same approach in the algorithm? 
+			</div>
+
+			<p>
+				Consider Figure 2, which shows magnitude plot of the sound sample shown before in Figure 1. As humans, we can easily detect the starting point of the note – Our eyes can easily detect the sudden amplitude jump at the marked location.
+			</p>
+			<p>
+				Can we use the same approach in the algorithm? 
+			</p>
+
+			<h2>Detecting Starting Point of Notes - Locating Local Maximums</h2>
+			<p>
+				We can detect sudden amplitude jumps by finding local maximums in the plot. However, even though the plot in the Figure 2 might look like a bar graph, sound has a wave-like property and the amplitude oscillates very quickly over time. One can see this more clearly by zooming into the plot.
+			</p>
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/3_Magnitude_A4WavFilePlot_zoombox.png" alt="Matlab graph of A4 note">.
+			</div>
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/5_fewPeaksCircled.png" alt="Matlab graph of A4 note">
+			</div>
+			<p>
+				 Figure 3 shows the area where I have zoomed in, and Figure 4 shows the zoomed-in plot.
+			</p>
+			<p>
+				As it is shown, the plot is a high frequency sinusoid. If we were to find local maximums, we would be ending up with many false data points. In the Figure 4, I have labelled few of the peaks that would falsely detected as starting point of the note.
+			</p>
+
+			<p>
+				It is apparent that we need to simplify the data we are given with. If we can somehow average the peaks of the sinusoid and find a smooth curve that ‘envelopes’ the original plot, it can be used to detect overall behavior of the original plot. You can see an example of such envelope in Figure 5 below.
+			</p>
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/6_1_smoothItOut.png" alt="Matlab graph of A4 note">
+			</div>
+			
+
+			<h2>Detecting Starting Point of Notes - Locating Local Maximums</h2>
+			<p>
+				We can use a Gaussian Filter to find the envelope. By convolving a Gaussian Curve to our plot, we can filter out the high frequency component of the plot. Although details of convolution operation will not be covered in this post, following points should be enough to understand this operation:
+				<ul>
+					<li>Convolution of two plots f(x) and g(x) in time-domain is equal to multiplication of the two in the frequency domain.</li>
+					<li>Gaussian Curve, which has a bell-curve shape in time-domain, holds its shape in frequency domain. However, the standard deviation of bell-curve in frequency domain is inverse of standard deviation of the bell-curve in the time-domain.</li>
+				</ul>
+			</p>
+			<p>
+				This means that if we want the envelope to keep overall shape of the plot, we must keep the low frequency components of the plot. And we can do so by convolving a Gaussian Curve with large standard deviation to the plot.
+			</p>
+
+			<p>
+				**Click to expand if you’re confused about why we must convolve a Gaussian curve with large standard deviation to the original plot**
+			</p>
+
+			<p>
+				Gaussian curve I used is shown in Figure 6. The size of the curve was determined from trial and error that forms the best envelope. 
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/7_2DetectedPeak.png" alt="Matlab graph of A4 note">
+			</div>
+			<p>
+				Red curve in Figure 7 shows the computed envelope when the Gaussian curve is convoluted to the signal. After down sampling process, we can now find the starting point of the note by locating local maximums.
+			</p>
+
+			<p>
+				The same procedure can be applied to recording input with multiple instances of note. Figure 8 to 10 below shows the algorithm being applied to multiple instances of note.
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/8_HandlingMulti_WavFile.png" alt="Matlab graph of A4 note">
+			</div>
+
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/9_HandlingMulti_magOfwav.png" alt="Matlab graph of A4 note">
+			</div>
+
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/10_HandlingMulti_magOfwavANDGaussian.png" alt="Matlab graph of A4 note">
+			</div>
+			<p>
+				Now that we’re able to find out the starting points of each notes, we will now find the ending points, in order to extract individual instance of notes from the recording.
+			</p>
+
+
+			<h2>Finding Ending Point of the Note</h2>
+			<p>
+				For ending points, we can simply take the midpoint of consecutive starting points. For the last note, we will extract the note until the recording ends.
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/16_DurationOfFirstNote.png" alt="Matlab graph of A4 note">
+			</div>
+			<p>
+				Figure 11 shows the overall process of finding duration of the first note.
+			</p>
+
+			<h2>Summary of Note Separation Algorithm</h2>
+			<div class="imageContainer">
+				<img class="image_margin" src="./img/18_SeparatedSegment.png" alt="Matlab graph of A4 note">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					figure: hello world!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 				</p>
+			</div>
 
-				<h2>Detecting Starting Point of Notes - Locating Local Maximums</h2>
-				<p>
-					We can detect sudden amplitude jumps by finding local maximums in the plot. However, even though the plot in the Figure 2 might look like a bar graph, sound has a wave-like property and the amplitude oscillates very quickly over time. One can see this more clearly by zooming into the plot.
-				</p>
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/3_Magnitude_A4WavFilePlot_zoombox.png" alt="Matlab graph of A4 note">.
-				</div>
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/4_zoomed.png" alt="Matlab graph of A4 note">
-				</div>
-				<p>
-					 Figure 3 shows the area where I have zoomed in, and Figure 4 shows the zoomed-in plot.
-				</p>
-				<p>
-					As it is shown, the plot is a high frequency sinusoid. If we were to find local maximums, we would be ending up with many false data points. In the Figure 4, I have labelled few of the peaks that would falsely detected as starting point of the note.
-				</p>
+		</div><!-- END OF container -->
+	</body>
 
-				<p>
-					It is apparent that we need to simplify the data we are given with. If we can somehow average the peaks of the sinusoid and find a smooth curve that ‘envelopes’ the original plot, it can be used to detect overall behavior of the original plot. You can see an example of such envelope in Figure 5 below.
-				</p>
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/5_fewPeaksCircled.png" alt="Matlab graph of A4 note">
-				</div>
-
-				<h2>Detecting Starting Point of Notes - Locating Local Maximums</h2>
-				<p>
-					We can use a Gaussian Filter to find the envelope. By convolving a Gaussian Curve to our plot, we can filter out the high frequency component of the plot. Although details of convolution operation will not be covered in this post, following points should be enough to understand this operation:
-					<ul>
-						<li>Convolution of two plots f(x) and g(x) in time-domain is equal to multiplication of the two in the frequency domain.</li>
-						<li>Gaussian Curve, which has a bell-curve shape in time-domain, holds its shape in frequency domain. However, the standard deviation of bell-curve in frequency domain is inverse of standard deviation of the bell-curve in the time-domain.</li>
-					</ul>
-				</p>
-				<p>
-					This means that if we want the envelope to keep overall shape of the plot, we must keep the low frequency components of the plot. And we can do so by convolving a Gaussian Curve with large standard deviation to the plot.
-				</p>
-
-				<p>
-					**Click to expand if you’re confused about why we must convolve a Gaussian curve with large standard deviation to the original plot**
-				</p>
-
-				<p>
-					Gaussian curve I used is shown in Figure 6. The size of the curve was determined from trial and error that forms the best envelope. 
-				</p>
-
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/6_1_smoothItOut.png" alt="Matlab graph of A4 note">
-				</div>
-				<p>
-					Red curve in Figure 7 shows the computed envelope when the Gaussian curve is convoluted to the signal. After down sampling process, we can now find the starting point of the note by locating local maximums.
-				</p>
-
-				<p>
-					The same procedure can be applied to recording input with multiple instances of note. Figure 8 to 10 below shows the algorithm being applied to multiple instances of note.
-				</p>
-
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/8_HandlingMulti_WavFile.png" alt="Matlab graph of A4 note">
-				</div>
-
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/9_HandlingMulti_magOfwav.png" alt="Matlab graph of A4 note">
-				</div>
-
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/10_HandlingMulti_magOfwavANDGaussian.png" alt="Matlab graph of A4 note">
-				</div>
-				<p>
-					Now that we’re able to find out the starting points of each notes, we will now find the ending points, in order to extract individual instance of notes from the recording.
-				</p>
-
-
-				<h2>Finding Ending Point of the Note</h2>
-				<p>
-					For ending points, we can simply take the midpoint of consecutive starting points. For the last note, we will extract the note until the recording ends.
-				</p>
-
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/16_DurationOfFirstNote.png" alt="Matlab graph of A4 note">
-				</div>
-				<p>
-					Figure 11 shows the overall process of finding duration of the first note.
-				</p>
-
-				<h2>Summary of Note Separation Algorithm</h2>
-				<div class="imageContainer">
-					<img class="image_margin" src="./img/18_SeparatedSegment.png" alt="Matlab graph of A4 note">
-					<div class="LINE_BREAK_IMAGE_85"></div>
-					<p class="figureText">
-						figure: hello world!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-					</p>
-				</div>
-
-			</div><!-- END OF container -->
-		</body>
-
-	</html>
+</html>
 

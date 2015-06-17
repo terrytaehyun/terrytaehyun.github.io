@@ -44,6 +44,14 @@ ul {
 	padding: 0px 0 10px 80px;
 }
 
+.subHeading {
+	padding-left: 40px;
+}
+
+.indent {
+	padding-left: 60px;
+}
+
 .LINE_BREAK_HOR_85 {
 	height: 1px;
 	width: 85%;
@@ -55,6 +63,11 @@ ul {
 p {
 	padding-left: 40px;
 	padding-right: 40px;		
+}
+
+ul {
+	padding-left: 80px;
+	padding-right: 80px;
 }
 
 /*Image container and image figure caption */
