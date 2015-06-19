@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+
+		<title>Spearbird::How to Convert Color Image to Grayscale Image</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Roboto:500,100,300,400' rel='stylesheet' type='text/css' />
+		<link href="css/colorToGrayScale.css" rel="stylesheet" type="text/css" />
+
+		<!-- Google Tag Manager -->
+		<script>
+  			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  			ga('create', 'UA-64158825-1', 'auto');
+  			ga('send', 'pageview');
+
+		</script>
+		<!-- End Google Tag Manager -->
+	</head>
+
+	<body class="no_select">
+		<div id="container">
+			<h2>Introduction</h2>
+			<p>
+				Simplifying a color image to image with less complexity is one of the important base technique in the field of computer graphics. 
+			</p>
+			<p>
+				For example, binarization of color image is often used in feature detection algorithms such as edge detection. Also, this technique is commonly used as a pre-processing algorithm in many Optical Character Recognition (OCR) algorithms.
+			</p>
+			<p>
+				In this posting, I will be introducing a method of converting a color image to a grayscale image by transforming the image from the RGB color space to the YCbCr color space. The converted grayscale image will be further processed to a binary image using the threshold method.
+			</p>
+			<p>
+				The post will be utilizing Matlab for performing the conversion.
+			</p>
+
+			<div class="LINE_BREAK_HOR_85"></div>
+
+
+			<h2>Background</h2>
+			<p>
+				Converting the RGB image to a binary image requires the RGB image to be first encoded into YCbCr domain. The luminance (Y) channel of the YCbCr color space is used to represent the image in grayscale. 
+			</p>
+			<p>
+				Pixel values of the grayscale image is within range of 0 to 255, with 0 typically taken to be black and 255 taken to be white. 
+			</p>
+			<p>
+				By setting a threshold value as 128, and re-assigning the pixel values within range of 0-127 to 0 and 128-255 to 255, we can further process the grayscale image to a binary image.
+			</p>
+
+			<div class="LINE_BREAK_HOR_85"></div>
+
+
+			<h2>Methodology</h2>
+			<h3 class="subHeading">RGB Color Space to YCbCr Color Space</h3>
+			<p>
+				The RGB color space and YCbCr color space is related with following formula:
+				<p>
+					Y = ( 75R + 150G + 29B ) / 256 <br />
+					Cb = ( -44R – 87G + 131B ) / 256 + 128 <br />
+					Cr = ( 130R -110G - 21B ) / 256 -128 <br />
+				</p>
+				<p>
+					Where R, G, B represents the R-channel, G-channel, and B-channel of original image respectively.
+				</p>
+			</p>
+			<p>
+				When we load an image with imread() command, Matlab will represent the image as 3-dimensional array. Once you type whos command, you will find out that first two dimensions indicate the size (width and length) of the image.
+			</p>
+			<p>
+				Figure 1 below shows the original image loaded in Matlab
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_jieun_alignMid" src="./img/jieun.jpg" alt="riginal Image - Image of a female singer Ji Eun">
+				<img class="image_margin_original" src="./img/whos.png" alt="Image of Matlab, with whos() command revealing loaded RGB image">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 1: Loaded original image with whos() command revealing the content's attributes.<br />
+					Original Image: <a href="https://en.wikipedia.org/wiki/Song_Jieun" target="_blank">Jieun</a>, a female singer.
+				</p>
+			</div>
+
+			<p>
+				The third dimension, which has value of 3, represents the number of channels of the image. The first array stores the intensity value of the red channel, next array stores information about the green channel, and third array for the blue channel.
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_margin_original" src="./img/code_RGB_to_YCbCr.png" alt="Image of Matlab implentation of the transformation">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 2: Matlab implementation of transforming the image in RGB color space to YCbCr color space.
+				</p>
+			</div>
+
+			<p>
+				Using the code shown in Figure 2, we can separate each of the channel to separate variables named R, G, and B. These variables can be directly used in the formula presented above to find the values for Y, Cb, Cr channel.
+			</p>
+
+			<h3 class="subHeading">Y Channel for Grayscale image</h3>
+			<p>
+				As it was mentioned in the Background section, the luminance (Y) channel can be used as a grayscale image. 
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_jieun_alignMid" src="./img/grascaleImage.png" alt="Grayscale Image - Image of a female singer Ji Eun in grayscale">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 3: Grayscale version of the origianl image.
+				</p>
+			</div>
+
+			<p>
+				Using the code shown in Figure 3, we can now display the original image in grayscale form. Note that the pixel values cannot contain decimal values, as only whole numbers are used to represent the intensity values. The unit8() function will make sure the pixel values can be represented with 8 bits (0 to 255). The uint8() function rounds off the decimal points, and sets any out-of-bound values to the closest bounding numbers (0 or 255).
+			</p>
+
+			<h3 class="subHeading">Grayscale to Binary Image: Threshold Method</h3>
+			<p>
+				We can further simplify the grayscale image to a binary image. As analogy, we can think of the binarization like a quantizing an analog signal to a digital signal with single bit. 
+			</p>
+			<p>
+				We will set the threshold as 128, which lies at the middle of the possible value range. Any pixel values in range of [0, 127] will be re-assigned to 0, and the pixels in range of [128, 255] will be re-assigned to 255.
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_margin_original" src="./img/binarizeImage.png" alt="Image of Matlab implentation of the binarization of image">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 4: Matlab implementation of binarization of the grayscale image.
+				</p>
+			</div>
+
+			<p>
+				Figure 4 shows the implementation of the binarization in Matlab.
+			</p>
+
+			<div class="imageContainer">
+				<img class="image_jieun" src="./img/jieun.jpg" alt="Original Image - Image of a female singer Ji Eun">
+				<img class="image_jieun" src="./img/grascaleImage.png" alt="Grayscale Image - Image of a female singer Ji Eun in grayscale">
+				<img class="image_jieun" src="./img/binaryImage.png" alt="Binary Image - Image of a female singer Ji Eun in binary">
+				<div class="LINE_BREAK_IMAGE_85"></div>
+				<p class="figureText">
+					Figure 5: Result of binarization. Original image (left), grayscale image (middle), and binarized image (right)
+				</p>
+			</div>
+
+			<p>
+				Figure 5 shows the result of the binarization, as well as the original image and the grayscale image.
+			</p>
+
+		</div>
+	</body>
+</html>
