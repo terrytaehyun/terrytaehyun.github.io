@@ -71,6 +71,11 @@
 			<p>
 				When we load an image with imread() command, Matlab will represent the image as 3-dimensional array. Once you type whos command, you will find out that first two dimensions indicate the size (width and length) of the image.
 			</p>
+			
+			<p>
+				The third dimension, which has value of 3, represents the number of channels of the image. The first array stores the intensity value of the red channel, next array stores information about the green channel, and third array for the blue channel.
+			</p>
+
 			<p>
 				Figure 1 below shows the original image loaded in Matlab
 			</p>
@@ -84,10 +89,6 @@
 					Original Image: <a href="https://en.wikipedia.org/wiki/Song_Jieun" target="_blank">Jieun</a>, a female singer.
 				</p>
 			</div>
-
-			<p>
-				The third dimension, which has value of 3, represents the number of channels of the image. The first array stores the intensity value of the red channel, next array stores information about the green channel, and third array for the blue channel.
-			</p>
 
 			<div class="imageContainer">
 				<img class="image_margin_original" src="./img/code_RGB_to_YCbCr.png" alt="Image of Matlab implentation of the transformation">
