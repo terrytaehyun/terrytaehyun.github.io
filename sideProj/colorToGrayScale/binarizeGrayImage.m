@@ -10,3 +10,6 @@ function [binarizedImage] = binarizeGrayImage(image)
         end
     end
 end
+
+
+
