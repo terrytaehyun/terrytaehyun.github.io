@@ -49,7 +49,7 @@ ul {
 }
 
 .indent {
-	padding-left: 60px;
+	padding-left: 20px;
 }
 
 .LINE_BREAK_HOR_85 {
@@ -96,6 +96,7 @@ ul {
 	border-style: solid;
 	border-width: 1px;
 	border-color: #A9A9A9;
+	padding-bottom: 20px;
 }
 
 /* Icon Container stylings*/
