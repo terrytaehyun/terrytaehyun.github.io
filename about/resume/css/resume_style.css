@@ -14,12 +14,23 @@ body {
 h1, h2 {
 	font-weight: 100;
 	font-size: 32px;
-	padding: 10px 0 10px 20px;
+	padding: 10px 0 0px 20px;
+	margin: 0px;
 }
 
 h3, h4, h6 {
 	font-weight: 300;
 	padding: 10px 0 10px 20px;
+}
+
+p {
+	padding-left: 20px;
+	padding-right: 40px;		
+}
+
+ul {
+	padding-left: 40px;
+	padding-right: 40px;
 }
 
 .no_select {
@@ -47,7 +58,8 @@ h3, h4, h6 {
 
 /* Tow column paragraph */
 .TwoColumnContainer {
-
+	/* To make parent div to have size of child div */
+	overflow: hidden;
 }
 
 .rightColumn {
@@ -58,4 +70,25 @@ h3, h4, h6 {
 .leftColumn {
 	width: 50%;
 	float:left;
+}
+
+#name {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.LINE_BREAK_HOR_85_head {
+	height: 1px;
+	width: 85%;
+	background-color: #A9A9A9;
+	/*margin: 0 auto;*/
+	margin: 10px auto 20px auto;
+}
+
+.LINE_BREAK_HOR_85 {
+	height: 1px;
+	width: 85%;
+	background-color: #A9A9A9;
+	/*margin: 0 auto;*/
+	margin: 40px auto 30px auto;
 }
