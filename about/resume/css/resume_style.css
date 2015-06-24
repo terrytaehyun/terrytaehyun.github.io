@@ -23,13 +23,18 @@ h3, h4, h6 {
 	padding: 10px 0 10px 20px;
 }
 
-p {
+p.heading {
 	padding-left: 20px;
 	padding-right: 40px;		
 }
 
-ul {
+p {
 	padding-left: 40px;
+	padding-right: 40px;		
+}
+
+ul {
+	padding-left: 60px;
 	padding-right: 40px;
 }
 
