@@ -40,6 +40,10 @@ a:visited {
 	color: #6633FF;
 }
 
+.image a {
+	text-decoration: none;
+}
+
 ul {
 	padding: 0px 0 10px 80px;
 }
